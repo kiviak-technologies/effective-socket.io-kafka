@@ -6,16 +6,10 @@
 const Adapter = require('socket.io-adapter');
 
 /**
- * Exports
- */
-
-module.exports = Kafka;
-
-/**
  * Kafka adapter class
  */
 
-class Kafka extends Adapter {
+const Kafka = class extends Adapter {
 
   constructor(nsp) {
     super(nsp);
@@ -23,4 +17,10 @@ class Kafka extends Adapter {
 
 
   
-}
+};
+
+/**
+ * Exports
+ */
+
+module.exports = Kafka;
