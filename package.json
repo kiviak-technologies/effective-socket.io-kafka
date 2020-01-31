@@ -1,0 +1,22 @@
+{
+  "name": "effective-socket.io-kafka",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiviak-technologies/effective-socket.io-kafka.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kiviak-technologies/effective-socket.io-kafka/issues"
+  },
+  "homepage": "https://github.com/kiviak-technologies/effective-socket.io-kafka#readme",
+  "dependencies": {
+    "socket.io-adapter": "^1.1.2"
+  }
+}
