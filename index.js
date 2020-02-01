@@ -44,9 +44,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
         super.broadcast(msg.packet, msg.opts);
         break;
       case ADDALL:
-        if (this.nsp.connected[msg.id]) {
-          super.addAll(msg.id, msg.rooms);
-        }
+        super.addAll(msg.id, msg.rooms);
         break;
     }
   }
@@ -71,9 +69,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     * -> call fn.
     */
   addAll(id, rooms, fn) {
-    if (this.nsp.connected[id]) {
-      return super.addAll(id, rooms, fn);
-    }
+    super.addAll(id, rooms, fn);
     this.kafkaProducer.send([{
       topic: this.topic,
       messages: JSON.stringify({ uuid: this.uuid, type: ADDALL, id, rooms })
