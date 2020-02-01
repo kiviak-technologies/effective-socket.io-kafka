@@ -12,6 +12,7 @@ const uuidv4 = require('uuid/v4');
  */
 
 const BROADCAST = 0;
+const ADDALL = 1;
 
 /**
  * Returns a KafkaAdapter class
@@ -43,14 +44,36 @@ const factory = (options) => class KafkaAdapter extends Adapter {
         }
         super.broadcast(msg.packet, msg.opts);
         break;
+      case ADDALL:
+        super.addAll(msg.id, msg.rooms);
+        break;
     }
   }
 
+  /**
+   * @override
+   */
   broadcast(packet, opts) {
     super.broadcast(packet, opts);
     this.kafkaProducer.send([{
       topic: this.topic,
       messages: JSON.stringify({ uuid: this.uuid, type: BROADCAST, packet, opts })
+    }], (err, data) => console.log(err, data));
+  }
+
+  /**
+    * @override
+    * @todo ACK, async fn call
+    * -> PING for n = (number of nodes)-1.
+    * -> Send random id with request.
+    * -> Wait (with timeout) for n responses identified by id+1.
+    * -> call fn.
+    */
+  addAll(id, rooms, fn) {
+    super.addAll(id, rooms, fn);
+    this.kafkaProducer.send([{
+      topic: this.topic,
+      messages: JSON.stringify({ uuid: this.uuid, type: ADDALL, id, rooms })
     }], (err, data) => console.log(err, data));
   }
 
