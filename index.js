@@ -29,7 +29,6 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     this.kafkaConsumer = new kafka.Consumer(this.kafkaClient, [], options);
     this.kafkaConsumer.on('message', this.onMessage.bind(this));
     this.kafkaConsumer.addTopics([this.topic]);
-    setInterval(() => console.log(this.rooms), 10000);
   }
 
   onMessage(message) {
@@ -45,7 +44,9 @@ const factory = (options) => class KafkaAdapter extends Adapter {
         super.broadcast(msg.packet, msg.opts);
         break;
       case ADDALL:
-        super.addAll(msg.id, msg.rooms);
+        if (this.nsp.connected[msg.id]) {
+          super.addAll(msg.id, msg.rooms);
+        }
         break;
     }
   }
@@ -70,7 +71,9 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     * -> call fn.
     */
   addAll(id, rooms, fn) {
-    super.addAll(id, rooms, fn);
+    if (this.nsp.connected[id]) {
+      return super.addAll(id, rooms, fn);
+    }
     this.kafkaProducer.send([{
       topic: this.topic,
       messages: JSON.stringify({ uuid: this.uuid, type: ADDALL, id, rooms })
