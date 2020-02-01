@@ -32,7 +32,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
   }
 
   onMessage(message) {
-    const msg = JSON.parse(message);
+    const msg = JSON.parse(message.value);
     if (msg.uuid == this.uuid) {
       return;
     }
