@@ -38,6 +38,9 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     }
     switch (msg.type) {
       case BROADCAST:
+        if (packet.nsp != this.nsp.name) {
+          break;
+        }
         super.broadcast(msg.packet, msg.opts);
         break;
     }
