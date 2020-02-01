@@ -17,7 +17,6 @@ const ADDALL = 1;
 /**
  * Returns a KafkaAdapter class
  */
-
 const factory = (options) => class KafkaAdapter extends Adapter {
 
   constructor(nsp) {
@@ -75,6 +74,10 @@ const factory = (options) => class KafkaAdapter extends Adapter {
       topic: this.topic,
       messages: JSON.stringify({ uuid: this.uuid, type: ADDALL, id, rooms })
     }], (err, data) => console.log(err, data));
+  }
+
+  add(id, room, fn) {
+    return this.addAll(id, [room], fn);
   }
 
 };
