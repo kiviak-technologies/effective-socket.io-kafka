@@ -38,7 +38,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     }
     switch (msg.type) {
       case BROADCAST:
-        this.broadcast(msg.packet, msg.opts);
+        super.broadcast(msg.packet, msg.opts);
         break;
     }
   }
