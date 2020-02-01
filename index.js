@@ -13,6 +13,8 @@ const uuidv4 = require('uuid/v4');
 
 const BROADCAST = 0;
 const ADDALL = 1;
+const DEL = 2;
+const DELALL = 3;
 
 /**
  * Returns a KafkaAdapter class
@@ -44,9 +46,16 @@ const factory = (options) => class KafkaAdapter extends Adapter {
         super.broadcast(msg.packet, msg.opts);
         break;
       case ADDALL:
-        if (this.nsp.connected[msg.id]) {
-          super.addAll(msg.id, msg.rooms);
+        if (!this.nsp.connected[msg.id]) {
+          break;
         }
+        super.addAll(msg.id, msg.rooms);
+        break;
+      case DEL:
+        super.del(msg.id, msg.room);
+        break;
+      case DELALL:
+        super.delAll(msg.id);
         break;
     }
   }
@@ -80,8 +89,35 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     }], (err) => fn && fn(err));
   }
 
+  /**
+   * @override
+   */
   add(id, room, fn) {
     return this.addAll(id, [room], fn);
+  }
+
+  /**
+   * @override
+   * @todo cf addAll
+   */
+  delAll(id, fn) {
+    super.delAll(id);
+    this.kafkaProducer.send([{
+      topic: this.topic,
+      messages: JSON.stringify({ uuid: this.uuid, type: DELALL, id })
+    }], (err) => fn && fn(err));
+  }
+
+  /**
+   * @override
+   * @todo cf addAll
+   */
+  del(id, room, fn) {
+    super.del(id, room);
+    this.kafkaProducer.send([{
+      topic: this.topic,
+      messages: JSON.stringify({ uuid: this.uuid, type: DEL, id, room })
+    }], (err) => fn && fn(err));
   }
 
 };
