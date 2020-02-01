@@ -29,6 +29,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     this.kafkaConsumer = new kafka.Consumer(this.kafkaClient, [], options);
     this.kafkaConsumer.on('message', this.onMessage.bind(this));
     this.kafkaConsumer.addTopics([this.topic]);
+    setInterval(() => console.log(this.rooms), 10000);
   }
 
   onMessage(message) {
