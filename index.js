@@ -51,7 +51,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     this.kafkaProducer.send([{
       topic: this.topic,
       messages: JSON.stringify({ uuid: this.uuid, type: BROADCAST, packet, opts })
-    }]);
+    }], (err, data) => console.log(err, data));
   }
 
 };
