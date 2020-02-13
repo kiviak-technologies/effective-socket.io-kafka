@@ -30,7 +30,7 @@ const factory = (options) => class KafkaAdapter extends Adapter {
     this.kafkaProducer = new kafka.Producer(this.kafkaClient, options);
     this.kafkaConsumer = new kafka.Consumer(this.kafkaClient, [], options);
     this.kafkaConsumer.on('message', this.onMessage.bind(this));
-    this.kafkaConsumer.addTopics([this.topic]);
+    this.kafkaConsumer.addTopics([this.topic], (err) => console.log(err));
   }
 
   onMessage(message) {
